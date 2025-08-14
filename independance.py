@@ -30,6 +30,14 @@ deltas = np.array(deltas)
 a = deltas[:-1]  
 b = deltas[1:]   
 
+# Calcul manuel de la corrélation de Pearson
+covariance = np.cov(a, b, ddof=0)[0, 1]
+std_a = np.std(a, ddof=0)
+std_b = np.std(b, ddof=0)
+r = covariance / (std_a * std_b)
+
+print(f"Coefficient de corrélation de Pearson r = {r:.6e}")
+
 # Tracé du nuage de points
 plt.figure(figsize=(5,5))
 plt.scatter(a, b, alpha=0.5)
@@ -38,6 +46,6 @@ plt.axvline(0, color='grey', lw=0.5)
 plt.plot([a.min(), a.max()], [a.min(), a.max()], 'r--', label='$y = x$')
 plt.xlabel(r'$\delta_k$')
 plt.ylabel(r'$\delta_{k+1}$')
-plt.title('Nuage de points $(\delta_k, \delta_{k+1})$ - Modèle DR')
+plt.title('Nuage de points $(\delta_k, \delta_{k+1})$ ')
 plt.legend()
 plt.show()
