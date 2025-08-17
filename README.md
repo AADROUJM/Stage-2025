@@ -1,8 +1,7 @@
 # Modélisation stochastique de l'erreur de calcul
 
-Ce projet s'inscrit dans le cadre d'un stage de recherche à l'Ensimag (Grenoble INP) au laboratoire LI-PaRAD.  
-L'objectif est d'étudier et de modéliser **l'erreur d'arrondi en arithmétique flottante**, en particulier lorsque les entrées suivent une loi log-uniforme.  
-Nous cherchons à comparer les bornes déterministes classiques avec des approches **stochastiques**, plus représentatives des cas pratiques.
+Ce projet s'inscrit dans le cadre d'un stage de recherche au laboratoire LI-PaRAD.  
+L'objectif est d'étudier et de modéliser **l'erreur d'arrondi en arithmétique flottante**.  
 
 ---
 
@@ -10,43 +9,41 @@ Nous cherchons à comparer les bornes déterministes classiques avec des approch
 
 En arithmétique flottante, chaque opération d’addition ou de multiplication est affectée d’une petite erreur relative d’arrondi, notée :
 
-\[
-\mathrm{fl}(a \,\circ\, b) = (a \,\circ\, b)(1 + \delta), \quad |\delta| \leq u
-\]
+$$
+\mathrm{fl}(a \circ b) = (a \circ b)(1 + \delta), \quad |\delta| \leq u
+$$
 
-où \(u\) est la précision machine (epsilon).  
-L'étude de la distribution de \(\delta\) est essentielle pour mieux comprendre la stabilité numérique des algorithmes.
+où $u$ est la précision machine (epsilon).  
+L'étude de la distribution de $\delta$ est essentielle pour mieux comprendre la stabilité numérique des algorithmes.
 
 ---
 
 ## Contenu du dépôt
 
 ### 1. `simulation_delta.py`
-- **But** : Générer des échantillons suivant une loi log-uniforme sur \([1,2[\), appliquer un arrondi flottant, et tracer l’**histogramme empirique** de l’erreur relative \(\delta\).
+- **But** : Générer des échantillons suivant une loi log-uniforme sur [1,2[, appliquer un arrondi flottant, et tracer l’**histogramme empirique** de l’erreur relative $\delta$.
 - **Concepts illustrés** :
-  - Loi log-uniforme pour les mantisses
-  - Arrondi au plus proche
-  - Distribution empirique de \(\delta\)
+  - Distribution empirique de $\delta$
 
 ---
 
 ### 2. `densite_theorique.py`
-- **But** : Calculer et tracer la **densité théorique** de l’erreur relative \(\delta\), dérivée analytiquement.  
-- **Idée clé** : la densité s’exprime comme une combinaison de morceaux dépendant des points de discrétisation \(k\).
-- **Sortie** : courbe rouge \(f_\delta(\delta)\) représentant la loi théorique.
+- **But** : Calculer et tracer la **densité théorique** de l’erreur relative $\delta$, dérivée analytiquement.  
+- **Idée clé** : la densité s’exprime comme une combinaison de morceaux dépendant des points de discrétisation $k$.
+- **Sortie** : courbe représentant la loi théorique.
 
 ---
 
 ### 3. `esperance_delta.py`
-- **But** : Calculer l’**espérance** de l’erreur relative \(\mathbb{E}[\delta]\) pour différentes précisions \(p\) (nombre de bits de mantisse).
+- **But** : Calculer l’**espérance** de l’erreur relative $E[\delta]$ pour différentes précisions $p$ (nombre de bits de mantisse).
 - **Résultat attendu** :  
-  - Le biais moyen \(\mathbb{E}[\delta]\) décroît très rapidement avec \(p\).  
+  - Le biais moyen $E[\delta]$ décroît très rapidement avec $p$.  
   - Pour les formats IEEE (simple ou double précision), le biais est négligeable.
 
 ---
 
 ### 4. `correlation_deltas.py`
-- **But** : Étudier la **corrélation entre deux erreurs successives** \((\delta_k, \delta_{k+1})\) lors de l’accumulation de sommes.
+- **But** : Étudier la **corrélation entre deux erreurs successives** $(\delta_k, \delta_{k+1})$ lors de l’accumulation de sommes.
 - **Méthode** :
   - Génération de nombres uniformes
   - Comparaison entre la somme flottante et la somme exacte (via `Decimal`)
@@ -58,16 +55,9 @@ L'étude de la distribution de \(\delta\) est essentielle pour mieux comprendre 
 
 ## Résultats principaux
 
-- La loi log-uniforme est **stable par multiplication** : le produit de deux mantisses log-uniformes reste log-uniforme après normalisation.
-- L’erreur relative \(\delta\) a une distribution **presque symétrique** autour de zéro, avec espérance très proche de 0.
-- Le biais \(\mathbb{E}[\delta]\) est en \(O(\varepsilon^2)\) et devient insignifiant en pratique.
+- L’erreur relative $\delta$ a une distribution **presque symétrique** autour de zéro, avec espérance très proche de 0.
+- Le biais $E[\delta]$ est en $O(\varepsilon^2)$ et devient insignifiant en pratique.
 - Les corrélations entre erreurs successives sont faibles, confirmant l’**hypothèse d’indépendance** souvent utilisée en analyse probabiliste des erreurs numériques.
 
 ---
 
-## Prérequis
-
-- Python 3.8+
-- Bibliothèques :
-  ```bash
-  pip install numpy matplotlib
